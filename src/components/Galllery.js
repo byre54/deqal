@@ -14,8 +14,17 @@ import {
 
 import ImageGallery from 'react-image-gallery'
 import "react-image-gallery/styles/css/image-gallery.css"
-import { UserAuth } from '@textile/hub'
-
+import {
+  KEYINFO,
+  IPFSGATEWAY,
+  getIdentity,
+  authorize,
+  setupBuckets,
+  storeIndex,
+  insertFile,
+  getPhotoIndex,
+  galleryFromIndex,
+} from '../libs/hub'
 
 const styles = {
   
@@ -26,8 +35,54 @@ class Gallery extends React.Component{
     super()
     this.state = {
       open : false,
+      bucks:null,
+      identity:null,
+      links:[],
+      photos:[],
+      isLoaded : false,
     }
   }
+  componentDidMount(){
+    this.initHub()
+  }
+  initHub = async()=>{
+    const identity = await getIdentity()
+    // console.log(identity)
+    const auth = await authorize(KEYINFO,identity)
+    // console.log(auth)
+    this.initBuckets({identity})
+  }
+  initBuckets = async({identity})=>{
+    const bucks = await setupBuckets(KEYINFO,identity)
+    if(bucks){
+      this.setState({bucks,identity})
+      console.log({bucks,identity})
+      // const storedIndex= await storeIndex(['wp8336269.jpg','gfriend-korean-girl-group-model-korean-girls-girls-2132.jpg'],bucks.buckets,bucks.bucketKey,identity)
+      // console.log({storedIndex})
+      this.initBucketLinks({bucks,identity})
+      
+    }
+  }
+  initBucketLinks = async({bucks,identity}) =>{
+    const links = await bucks.buckets.links(bucks.bucketKey)
+    this.setState({links})
+    console.log({links})
+    this.initGallery({bucks,identity})
+  }
+  initGallery = async({bucks,identity}) =>{
+    const galleryIndex = await getPhotoIndex(bucks.buckets,bucks.bucketKey,identity)
+    console.log({galleryIndex})
+    const photos = await galleryFromIndex(galleryIndex,bucks.buckets,bucks.bucketKey,IPFSGATEWAY)
+    
+    photos.map(item=>item.onload = ()=>{
+      console.log({item})
+      this.setState({photos:[
+        ...this.state.photos,
+        item
+      ]})
+    })
+  }
+  
   render(){
     return (
       <div>
@@ -48,15 +103,24 @@ class Gallery extends React.Component{
         >
           <Modal.Header>Gallery</Modal.Header>
           <Modal.Content>
-            <InputFiles onChange={files => {
+            {this.state.bucks &&
+            <InputFiles onChange={async(files) => {
               // console.log(files[0])
               if(files[0].type.indexOf('image')!==-1){
-                console.log(files[0])
+                const file = files[0]
+                const path = file.name 
+                const storedIndex = await storeIndex([file.name],this.state.bucks.buckets,this.state.bucks.bucketKey,this.state.identity)
+                console.log({storedIndex})
+                const inserted = await insertFile(this.state.bucks.buckets,this.state.bucks.bucketKey,file,path)
+                console.log({inserted})
               }
             }}>
               <Button>Upload</Button>
-            </InputFiles>
-            <ImageGallery items={images} />
+            </InputFiles>}
+            <ImageGallery items={this.state.photos.map(item=>({
+              original:item.image.src,
+              thumbnail:item.image.src
+            }))} />
           </Modal.Content>
           <Modal.Actions>
             <Button color='blue' onClick={() => this.setState({open:false})}>
