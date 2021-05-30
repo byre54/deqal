@@ -155,7 +155,7 @@ const galleryFromIndex = async (index: GalleryIndex,buckets: Buckets, bucketKey:
     
     photos.push({
       image :image,
-      onload:image.onload,
+      // onload:image.onload,
       // src:`${ipfsGateway}/ipfs/${photo.cid}`,
       width: image.width,
       height: image.height,

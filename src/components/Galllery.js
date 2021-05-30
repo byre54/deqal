@@ -59,28 +59,31 @@ class Gallery extends React.Component{
       console.log({bucks,identity})
       // const storedIndex= await storeIndex(['wp8336269.jpg','gfriend-korean-girl-group-model-korean-girls-girls-2132.jpg'],bucks.buckets,bucks.bucketKey,identity)
       // console.log({storedIndex})
-      this.initBucketLinks({bucks,identity})
-      
+      // this.initBucketLinks({bucks,identity})
+      this.initGallery({bucks,identity})
     }
   }
   initBucketLinks = async({bucks,identity}) =>{
     const links = await bucks.buckets.links(bucks.bucketKey)
     this.setState({links})
     console.log({links})
-    this.initGallery({bucks,identity})
+    
   }
   initGallery = async({bucks,identity}) =>{
     const galleryIndex = await getPhotoIndex(bucks.buckets,bucks.bucketKey,identity)
     console.log({galleryIndex})
     const photos = await galleryFromIndex(galleryIndex,bucks.buckets,bucks.bucketKey,IPFSGATEWAY)
-    
-    photos.map(item=>item.onload = ()=>{
-      console.log({item})
-      this.setState({photos:[
-        ...this.state.photos,
-        item
-      ]})
-    })
+    // setInterval(()=>{
+      
+    // },5000)
+    this.setState({photos})
+    // photos.map(item=>item.onload = ()=>{
+    //   console.log({item})
+    //   this.setState({photos:[
+    //     ...this.state.photos,
+    //     item
+    //   ]})
+    // })
   }
   
   render(){
