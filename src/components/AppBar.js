@@ -179,7 +179,7 @@ export default function PrimarySearchAppBar () {
             <TitleIcon />
           </IconButton>
           <Typography className={classes.title} variant='h6' noWrap>
-            <Link to='/'>LINKR</Link>
+            <Link to='/'>DEQAL</Link>
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
