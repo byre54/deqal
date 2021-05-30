@@ -1,0 +1,43 @@
+{
+  "name": "DEQAL",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "./",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && fission app publish"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@textile/hub": "^6.1.2",
+    "axios": "^0.19.2",
+    "clsx": "latest",
+    "ipfs": "^0.48.1",
+    "ipfs-api": "^26.1.2",
+    "material-ui-icons": "^1.0.0-beta.36",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-image-gallery": "^1.0.10",
+    "react-input-files": "^1.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "latest",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.0.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
