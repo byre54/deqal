@@ -120,7 +120,7 @@ const getPhotoIndex = async (buckets: Buckets, bucketKey: string,identity:Identi
     console.log(error)
   }
 }
-const galleryFromIndex = async (index: GalleryIndex,buckets: Buckets, bucketKey: string,ipfsGateway:string) => {
+const galleryFromIndex = async (index: GalleryIndex,buckets: Buckets, bucketKey: string,ipfsGateway:string,onload:any) => {
   if (!buckets || !bucketKey) {
     console.error('No bucket client or root key')
     return
@@ -152,7 +152,7 @@ const galleryFromIndex = async (index: GalleryIndex,buckets: Buckets, bucketKey:
     const image = new Image()
     image.src = 'data:'+mime+';base64,'+base64
     // const photo = index.paths.length > 1 ? json.preview : json.original
-    
+    image.onload = onload
     photos.push({
       image :image,
       // onload:image.onload,

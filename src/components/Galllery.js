@@ -2,6 +2,7 @@ import React from 'react'
 // nodejs library that concatenates classes
 // @material-ui/core components
 import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress'
 import PropTypes from 'prop-types'
 import InputFiles from 'react-input-files'
 
@@ -39,6 +40,8 @@ class Gallery extends React.Component{
       identity:null,
       links:[],
       photos:[],
+      images:[],
+      paths:[],
       isLoaded : false,
     }
   }
@@ -59,7 +62,7 @@ class Gallery extends React.Component{
       console.log({bucks,identity})
       // const storedIndex= await storeIndex(['wp8336269.jpg','gfriend-korean-girl-group-model-korean-girls-girls-2132.jpg'],bucks.buckets,bucks.bucketKey,identity)
       // console.log({storedIndex})
-      // this.initBucketLinks({bucks,identity})
+      this.initBucketLinks({bucks,identity})
       this.initGallery({bucks,identity})
     }
   }
@@ -71,19 +74,26 @@ class Gallery extends React.Component{
   }
   initGallery = async({bucks,identity}) =>{
     const galleryIndex = await getPhotoIndex(bucks.buckets,bucks.bucketKey,identity)
-    console.log({galleryIndex})
-    const photos = await galleryFromIndex(galleryIndex,bucks.buckets,bucks.bucketKey,IPFSGATEWAY)
+    this.setState({paths:galleryIndex.paths})
+    // const photos = await galleryFromIndex(galleryIndex,bucks.buckets,bucks.bucketKey,IPFSGATEWAY,(e)=>{
+    //   this.setState({images:[
+    //     ...this.state.images,
+    //     e.path[0].currentSrc
+    //   ]})
+    //   console.log({e})
+    // })
     // setInterval(()=>{
       
     // },5000)
-    this.setState({photos})
-    // photos.map(item=>item.onload = ()=>{
-    //   console.log({item})
-    //   this.setState({photos:[
-    //     ...this.state.photos,
-    //     item
-    //   ]})
-    // })
+    // this.setState({photos})
+    // photos.map(item=>{
+    //   item.onload = ()=>{
+    //     console.log({item})
+    //     this.setState({photos:[
+    //       ...this.state.photos,
+    //       item
+    //     ]})
+    // }})
   }
   
   render(){
@@ -120,10 +130,11 @@ class Gallery extends React.Component{
             }}>
               <Button>Upload</Button>
             </InputFiles>}
-            <ImageGallery items={this.state.photos.map(item=>({
-              original:item.image.src,
-              thumbnail:item.image.src
-            }))} />
+            {this.state.paths.length>0 ? 
+            <ImageGallery items={this.state.paths.map(item=>({
+              original:`${this.state.links.url}/${item}`,
+              thumbnail:`${this.state.links.url}/${item}`
+            }))} />:<CircularProgress />}
           </Modal.Content>
           <Modal.Actions>
             <Button color='blue' onClick={() => this.setState({open:false})}>
