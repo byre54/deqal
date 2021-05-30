@@ -3,6 +3,7 @@ import Container from '@material-ui/core/Container'
 import Box from '@material-ui/core/Box'
 import Profile from './components/Profile'
 import Create from './components/CreateProfile'
+import Landing from './components/Landing'
 import Edit from './components/EditProfile'
 import AppBar from './components/AppBar'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
@@ -14,7 +15,7 @@ export default function App () {
       <Container maxWidth='sm'>
         <Box my={4}>
           <Switch>
-            <Route path='/' exact component={Create} />
+            <Route path='/' exact component={Landing} />
             <Route path='/profile' exact component={Profile} />
             <Route path='/edit' exact component={Edit} />
             <Route path='/' component={Profile} />
