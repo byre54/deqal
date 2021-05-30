@@ -106,6 +106,7 @@ const getPhotoIndex = async (buckets: Buckets, bucketKey: string,identity:Identi
   }
   try {
     const metadata = buckets.pullPath(bucketKey, 'index.json')
+    console.log({bucketKey,buckets,identity})
     const { value } = await metadata.next();
     let str = "";
     for (var i = 0; i < value.length; i++) {
